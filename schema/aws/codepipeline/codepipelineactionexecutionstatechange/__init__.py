@@ -1,0 +1,12 @@
+# coding: utf-8
+
+from __future__ import absolute_import
+
+from schema.aws.codepipeline.codepipelineactionexecutionstatechange.marshaller import Marshaller
+from schema.aws.codepipeline.codepipelineactionexecutionstatechange.AWSEvent import AWSEvent
+from schema.aws.codepipeline.codepipelineactionexecutionstatechange.CodePipelineActionExecutionStateChange import CodePipelineActionExecutionStateChange
+from schema.aws.codepipeline.codepipelineactionexecutionstatechange.ExecutionResult import ExecutionResult
+from schema.aws.codepipeline.codepipelineactionexecutionstatechange.InputArtifacts import InputArtifacts
+from schema.aws.codepipeline.codepipelineactionexecutionstatechange.OutputArtifacts import OutputArtifacts
+from schema.aws.codepipeline.codepipelineactionexecutionstatechange.S3Location import S3Location
+from schema.aws.codepipeline.codepipelineactionexecutionstatechange.Type import Type

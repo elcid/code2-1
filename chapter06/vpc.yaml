@@ -31,7 +31,7 @@ Mappings:
     'eu-central-1':
       AMI: 'ami-e28d098d'
     'us-east-1':
-      AMI: 'ami-6057e21a'
+      AMI: 'ami-08f3d892de259504d'
     'us-east-2':
       AMI: 'ami-aa1b34cf'
     'us-west-1':
@@ -548,8 +548,10 @@ Resources:
         'Fn::Base64': !Sub |
           #!/bin/bash -x
           bash -ex << "TRY"
-            yum -y install httpd
-            service httpd start
+          yum update -y
+          yum install -y httpd.x86_64
+          systemctl start httpd.service
+          systemctl enable httpd.service
           TRY
           /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource ApacheWebserver --region ${AWS::Region}
       Tags:

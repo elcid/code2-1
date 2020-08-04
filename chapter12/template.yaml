@@ -296,7 +296,7 @@ Resources:
             echo "}" >> /etc/nginx/conf.d/discourse.conf
 
             # start Nginx
-            service nginx start
+        q    service nginx start
           TRY
           /opt/aws/bin/cfn-signal -e $? --stack ${AWS::StackName} --resource VMInstance --region ${AWS::Region}
     CreationPolicy:
