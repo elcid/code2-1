@@ -110,7 +110,7 @@ Resources:
     Properties:
       ApplicationName: !Ref EBWorkerApplication
       Description: 'Imagery worker: AWS in Action: chapter 16'
-      SolutionStackName: '64bit Amazon Linux 2018.03 v4.14.1 running Node.js'
+      SolutionStackName: '64bit Amazon Linux 2018.03 v4.15.0 running Node.js'
       OptionSettings:
       - Namespace: 'aws:autoscaling:launchconfiguration'
         OptionName: 'EC2KeyName'
@@ -124,15 +124,15 @@ Resources:
       - Namespace: 'aws:elasticbeanstalk:sqsd'
         OptionName: 'HttpPath'
         Value: '/sqs'
-      - Namespace: 'aws:elasticbeanstalk:container:nodejs'
-        OptionName: 'NodeCommand'
-        Value: 'node worker.js'
       - Namespace: 'aws:elasticbeanstalk:application:environment'
         OptionName: 'ImageQueue'
         Value: !Ref SQSQueue
       - Namespace: 'aws:elasticbeanstalk:application:environment'
         OptionName: 'ImageBucket'
         Value: !Ref Bucket
+      - Namespace: '  aws:elasticbeanstalk:xray'
+        OptionName: 'XRayEnabled'
+        Value: 'true'          
   EBWorkerEnvironment:
     Type: 'AWS::ElasticBeanstalk::Environment'
     Properties:
@@ -155,7 +155,7 @@ Resources:
       ApplicationName: !Ref EBWorkerApplication
       Description: 'Imagery worker: AWS in Action: chapter 16'
       SourceBundle:
-        S3Bucket: 'awsinaction-code2'
+        S3Bucket: 'jrm-code2'
         S3Key: 'chapter16/build/worker.zip'
   ServerInstanceProfile:
     Type: 'AWS::IAM::InstanceProfile'
@@ -223,7 +223,7 @@ Resources:
     Properties:
       ApplicationName: !Ref EBServerApplication
       Description: 'Imagery server: AWS in Action: chapter 16'
-      SolutionStackName: '64bit Amazon Linux 2018.03 v4.14.1 running Node.js'
+      SolutionStackName: '64bit Amazon Linux 2018.03 v4.15.0 running Node.js'
       OptionSettings:
       - Namespace: 'aws:autoscaling:asg'
         OptionName: 'MinSize'
@@ -234,9 +234,6 @@ Resources:
       - Namespace: 'aws:autoscaling:launchconfiguration'
         OptionName: 'IamInstanceProfile'
         Value: !Ref ServerInstanceProfile
-      - Namespace: 'aws:elasticbeanstalk:container:nodejs'
-        OptionName: 'NodeCommand'
-        Value: 'node server.js'
       - Namespace: 'aws:elasticbeanstalk:application:environment'
         OptionName: 'ImageQueue'
         Value: !Ref SQSQueue
@@ -246,6 +243,9 @@ Resources:
       - Namespace: 'aws:elasticbeanstalk:container:nodejs:staticfiles'
         OptionName: '/public'
         Value: '/public'
+      - Namespace: '  aws:elasticbeanstalk:xray'
+        OptionName: 'XRayEnabled'
+        Value: 'true'  
   EBServerEnvironment:
     Type: 'AWS::ElasticBeanstalk::Environment'
     Properties:
@@ -264,7 +264,7 @@ Resources:
       ApplicationName: !Ref EBServerApplication
       Description: 'Imagery server: AWS in Action: chapter 16'
       SourceBundle:
-        S3Bucket: 'awsinaction-code2'
+        S3Bucket: 'jrm-code2'
         S3Key: 'chapter16/build/server.zip'
 Outputs:
   EndpointURL:

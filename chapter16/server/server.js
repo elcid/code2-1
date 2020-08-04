@@ -1,8 +1,9 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var AWS = require('aws-sdk');
-var uuidv4 = require('uuid/v4');
+const { v4: uuidv4 } = require('uuid');
 var multiparty = require('multiparty');
+var AWSXRay = require('aws-xray-sdk');
 
 var lib = require('./lib.js');
 
@@ -17,6 +18,7 @@ var s3 = new AWS.S3({
 });
 
 var app = express();
+app.use(AWSXRay.express.openSegment('MyServer'));
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
@@ -133,6 +135,7 @@ app.post('/image', function(request, response) {
     }
   });
 });
+app.use(AWSXRay.express.closeSegment());
 
 app.get('/image/:id', function(request, response) {
   getImage(request.params.id, function(err, image) {
@@ -143,6 +146,7 @@ app.get('/image/:id', function(request, response) {
     }
   });
 });
+app.use(AWSXRay.express.closeSegment());
 
 app.post('/image/:id/upload', function(request, response) {
   getImage(request.params.id, function(err, image) {
@@ -157,6 +161,7 @@ app.post('/image/:id/upload', function(request, response) {
     }
   });
 });
+app.use(AWSXRay.express.closeSegment());
 
 app.listen(process.env.PORT || 8080, function() {
   console.log('Server started. Open http://localhost:' + (process.env.PORT || 8080) + ' with browser.');

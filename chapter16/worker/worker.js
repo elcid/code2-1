@@ -4,6 +4,7 @@ var AWS = require('aws-sdk');
 var assert = require('assert-plus');
 var Jimp = require('jimp');
 var fs = require('fs');
+var AWSXRay = require('aws-xray-sdk');
 
 var lib = require('./lib.js');
 
@@ -15,6 +16,7 @@ var s3 = new AWS.S3({
 });
 
 var app = express();
+app.use(AWSXRay.express.openSegment('MyWorker'));
 app.use(bodyParser.json());
 
 function getImage(id, cb) {
@@ -41,6 +43,7 @@ function getImage(id, cb) {
 app.get('/', function(request, response) {
   response.json({});
 });
+app.use(AWSXRay.express.closeSegment());
 
 app.post('/sqs', function(request, response) {
   assert.string(request.body.imageId, 'imageId');
@@ -57,6 +60,7 @@ app.post('/sqs', function(request, response) {
     }
   });
 });
+app.use(AWSXRay.express.closeSegment());
 
 var states = {
   'processed': processed
